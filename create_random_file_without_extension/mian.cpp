@@ -86,7 +86,19 @@ int createFileRand(const std::wstring& file_path,int file_name_max,int file_coun
     }
     return failCount;
 }
-int main() {
-    auto fail = createFileRand(L"D:\\filetemp", MAX_PATH,1000);
+int wmain(int argc,wchar_t* argv[]) {
+    if (argc != 4) {
+        std::wcout << L"command line input is wrong, the correct input is \"file path\" \"file_name_max_cout\" \"file count\" " <<std::endl;
+        std::wcout << L"example. \"D:\\filetemp\" 260 1000" << std::endl;
+        getchar();
+        return 0;
+    }
+
+    auto path = argv[1];
+    auto max_length = std::stol(argv[2]);
+    auto file_count = std::stol(argv[3]);
+
+    auto fail = createFileRand(path, max_length, file_count);
     return 0;
+
 }
