@@ -68,7 +68,7 @@ int createFileRand(const std::wstring& file_path,int file_name_max,int file_coun
     int failCount = 0;
     for (auto i = 0; i < file_count; ++i) {
         auto fileLength = random() % file_name_max;
-        auto fileName = file_path + L"\\" + wstrRand(fileLength);
+        auto fileName = file_path + L"\\" + std::to_wstring(i) + wstrRand(fileLength);
         auto handle = CreateFile(fileName.c_str(), GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
             NULL,
@@ -82,7 +82,10 @@ int createFileRand(const std::wstring& file_path,int file_name_max,int file_coun
             --i;
             ++failCount;
         }
-        else ::CloseHandle(handle);
+        else {
+            std::wcout << L"create file seq = " << i << std::endl;
+            ::CloseHandle(handle);
+        }
     }
     return failCount;
 }
@@ -99,6 +102,8 @@ int wmain(int argc,wchar_t* argv[]) {
     auto file_count = std::stol(argv[3]);
 
     auto fail = createFileRand(path, max_length, file_count);
+    std::wcout << L"done"<<std::endl;
+    getchar();
     return 0;
 
 }
