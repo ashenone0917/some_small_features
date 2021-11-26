@@ -59,8 +59,48 @@ inline  BOOL IsWin11() {
 	return bIsWin11;
 }
 
+std::string GetVersionStr() {
+	const int VERSION_STRING_LEN = 1024;
+	HKEY key;
+	if (RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"), &key) != ERROR_SUCCESS) {
+		return "";
+	}
+	char value[VERSION_STRING_LEN];
+	DWORD len = sizeof(value);
+	std::string res;
+	ZeroMemory(value, len);
+	if (RegQueryValueExA(key, "ProductName", 0, NULL, (LPBYTE)&value, &len) != ERROR_SUCCESS) {
+		RegCloseKey(key);
+		return "";
+	}
+	res = std::string(value);
+	len = sizeof(value);
+	ZeroMemory(value, len);
+	if (RegQueryValueExA(key, "ReleaseId", 0, NULL, (LPBYTE)&value, &len) != ERROR_SUCCESS) {
+		RegCloseKey(key);
+		return res;
+	}
+	res = res + " " + value;
+	RegCloseKey(key);
+	return res;
+}
+
+std::string GetVersionStrV2() {
+	std::string productName = GetVersionStr();
+	if (IsWin11()) {
+		static std::string win10 = "Windows 10";
+		static std::string win11 = "Windows 11";
+		auto findWin10 = productName.find(win10);
+		if (findWin10 != std::string::npos) {
+			productName.replace(findWin10, win10.size(), win11);
+		}
+	}
+	return productName;
+}
+
 int main()
 {
+	std::cout<< GetVersionStrV2() << std::endl;
 	IsWin11();
 	getchar();
     std::cout << "Hello World!\n";

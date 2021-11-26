@@ -30,13 +30,12 @@ string strRand(int length) {
 }
 
 //包含中文大小写
-wstring wstrRand(int length) {			// length: 产生字符串的长度
-    wchar_t tmp;							// tmp: 暂存一个随机数
-    wstring buffer;						// buffer: 保存返回值
+wstring wstrRand(int length) {			
+    wchar_t tmp;							
+    wstring buffer;						
     buffer.reserve(length);
-    // 下面这两行比较重要:
-    random_device rd;					// 产生一个 std::random_device 对象 rd
-    default_random_engine random(rd());	// 用 rd 初始化一个随机数发生器 random
+    random_device rd;					
+    default_random_engine random(rd());
     auto chineseRange = 0x9FA5 - 0x4E00;
     for (int i = 0; i < length; i++) {
         auto isChinese = random() % 2;
@@ -61,10 +60,10 @@ wstring wstrRand(int length) {			// length: 产生字符串的长度
 }
 
 
-int createFileRand(const std::wstring& file_path,int file_name_max,int file_count) {			// length: 产生字符串的长度
-    random_device rd;					// 产生一个 std::random_device 对象 rd
-    default_random_engine random(rd());	// 用 rd 初始化一个随机数发生器 random
-
+int createFileRand(const std::wstring& file_path,int file_name_max,int file_count) {			
+    random_device rd;					
+    default_random_engine random(rd());	
+    std::wcout << L"create file..."<< std::endl;
     int failCount = 0;
     for (auto i = 0; i < file_count; ++i) {
         auto fileLength = random() % file_name_max;
@@ -83,12 +82,24 @@ int createFileRand(const std::wstring& file_path,int file_name_max,int file_coun
             ++failCount;
         }
         else {
-            std::wcout << L"create file seq = " << i << std::endl;
+            //std::wcout << L"create file seq = " << i << std::endl;
             ::CloseHandle(handle);
         }
     }
     return failCount;
 }
+
+int createFileAndDir(const std::wstring& file_path, int file_count,int file_max_layer) {
+    auto size = file_count / file_max_layer;
+    //auto modsize = file_count / file_max_layer;
+    if (size <= file_max_layer) {
+
+    }
+    else {
+
+    }
+}
+
 int wmain(int argc,wchar_t* argv[]) {
     if (argc != 4) {
         std::wcout << L"command line input is wrong, the correct input is \"file path\" \"file_name_max_cout\" \"file count\" " <<std::endl;
