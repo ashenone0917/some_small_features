@@ -90,13 +90,13 @@ int createFileRand(const std::wstring& file_path,int file_name_max,int file_coun
 }
 
 int createFileAndDir(const std::wstring& file_path, int file_count,int file_max_layer) {
-    auto size = file_count / file_max_layer;
-    //auto modsize = file_count / file_max_layer;
-    if (size <= file_max_layer) {
-
+    if (file_count <= file_max_layer) {
+        createFileRand(file_path, 100, file_count);
     }
     else {
-
+        for (auto i = 0; i < file_max_layer; ++i) {
+            ::CreateDirectory()
+        }
     }
 }
 
@@ -107,7 +107,7 @@ int wmain(int argc,wchar_t* argv[]) {
         getchar();
         return 0;
     }
-
+   
     auto path = argv[1];
     auto max_length = std::stol(argv[2]);
     auto file_count = std::stol(argv[3]);
