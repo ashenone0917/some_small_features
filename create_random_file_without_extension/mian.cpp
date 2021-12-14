@@ -63,9 +63,10 @@ wstring wstrRand(int length) {
 int createFileRand(const std::wstring& file_path,int file_name_max,int file_count) {			
     random_device rd;					
     default_random_engine random(rd());	
-    std::wcout << L"create file..."<< std::endl;
+    //std::wcout << L"create file..."<< std::endl;
     int failCount = 0;
     for (auto i = 0; i < file_count; ++i) {
+        ::Sleep(1);
         auto fileLength = random() % file_name_max;
         auto fileName = file_path + L"\\" + std::to_wstring(i) + wstrRand(fileLength);
         auto handle = CreateFile(fileName.c_str(), GENERIC_READ | GENERIC_WRITE,
@@ -94,6 +95,7 @@ std::vector<std::wstring> createDirRand(const std::wstring& file_path, int file_
     default_random_engine random(rd());
     std::vector<std::wstring> ret;
     for (auto i = 0; i < file_count; ++i) {
+        ::Sleep(1);
         auto fileLength = random() % file_name_max;
         auto fileName = file_path + L"\\" + std::to_wstring(i) + wstrRand(fileLength);
         auto handle = CreateDirectory(fileName.c_str(), NULL);
@@ -112,13 +114,18 @@ std::vector<std::wstring> createDirRand(const std::wstring& file_path, int file_
 //<param  "path","file count","current file max" />
 void createFileAndDir(const std::wstring& file_path, int file_count,int file_max_layer) {
     if (file_count <= file_max_layer) {
-        createFileRand(file_path, 100, file_count);
+        auto name_name_len = MAX_PATH - file_path.length() > 100 ? 100 : MAX_PATH - file_path.length();
+        createFileRand(file_path, name_name_len, file_count);
     }
     else {
         auto modsize = file_count % file_max_layer;
-        if(modsize > 0) createFileRand(file_path, 100, modsize);
 
-        auto subDir = createDirRand(file_path, 100, file_max_layer);
+        if (modsize > 0) {
+            auto name_name_len = MAX_PATH - file_path.length() > 100 ? 100 : MAX_PATH - file_path.length();
+            createFileRand(file_path, name_name_len, modsize);
+        }
+
+        auto subDir = createDirRand(file_path, 10, file_max_layer);
         int subsize = 0;
         if (file_max_layer == 1) subsize = file_count - file_max_layer;
         else subsize = file_count / file_max_layer;
@@ -142,7 +149,8 @@ int wmain(int argc,wchar_t* argv[]) {
 
     auto fail = createFileRand(path, max_length, file_count);*/
     //目录，文件总数，每个目录下最多的文件或目录数量
-    createFileAndDir(L"D:\\FileTest", 100, 10);
+    std::wcout << L"start" << std::endl;
+    createFileAndDir(L"J:\\fstest", 100000, 10);
     std::wcout << L"done"<<std::endl;
     getchar();
     return 0;
