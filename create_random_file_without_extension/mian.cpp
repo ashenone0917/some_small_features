@@ -136,21 +136,19 @@ void createFileAndDir(const std::wstring& file_path, int file_count,int file_max
 }
 
 int wmain(int argc,wchar_t* argv[]) {
-   /* if (argc != 4) {
-        std::wcout << L"command line input is wrong, the correct input is \"file path\" \"file_name_max_cout\" \"file count\" " <<std::endl;
-        std::wcout << L"example. \"D:\\filetemp\" 260 1000" << std::endl;
+    if (argc != 4) {
+        std::wcout << L"command line input is wrong, the correct input is \"file path\" \"file_cout\" \"file count in dir\" " << std::endl;
+        std::wcout << L"example. \"D:\\filetemp\" 100000 1000" << std::endl;
         getchar();
         return 0;
     }
-   
-    auto path = argv[1];
-    auto max_length = std::stol(argv[2]);
-    auto file_count = std::stol(argv[3]);
 
-    auto fail = createFileRand(path, max_length, file_count);*/
+    auto path = argv[1];
+    auto count = std::stol(argv[2]);
+    auto count_in_dir = std::stol(argv[3]);
     //目录，文件总数，每个目录下最多的文件或目录数量
     std::wcout << L"start" << std::endl;
-    createFileAndDir(L"J:\\fstest", 100000, 10);
+    createFileAndDir(path, count, count_in_dir);
     std::wcout << L"done"<<std::endl;
     getchar();
     return 0;
